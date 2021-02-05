@@ -1,4 +1,5 @@
 import 'package:TicTacToe/Screens/menuScreen.dart';
+import '../Screens/mainScreen.dart';
 
 import '../Providers/myProvider.dart';
 import 'package:flutter/material.dart';
@@ -33,20 +34,23 @@ class _TileState extends State<Tile> {
               barrierDismissible: false,
               builder: (context) {
                 return AlertDialog(
-                  title: Text((result==1||result==-1)?'Player ${result==1?2:1} won !':'It\'s a draw'),
+                  title: Text((result == 1 || result == -1)
+                      ? 'Player ${result == 1 ? 2 : 1} won !'
+                      : 'It\'s a draw'),
                   actions: [
                     TextButton(
                       child: Text('Main Menu'),
                       onPressed: () {
                         context.read<MyProvider>().resetBoard();
-                        Navigator.of(context).pushNamed(MenuScreen.name);
+                        Navigator.of(context)
+                            .popUntil(ModalRoute.withName(MenuScreen.name));
                       },
                     ),
                     TextButton(
                       child: Text('New Game'),
                       onPressed: () {
                         context.read<MyProvider>().resetBoard();
-                        Navigator.of(context).pop();
+                        Navigator.of(context).popUntil(ModalRoute.withName(MainScreen.name));
                       },
                     ),
                   ],

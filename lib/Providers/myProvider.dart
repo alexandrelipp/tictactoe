@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'dart:async';
 import '../Ai/minMax.dart';
 
 enum Computer {
@@ -97,6 +98,17 @@ class MyProvider with ChangeNotifier {
     return free[bestIndex];
   }
 
+  void _computerMove(int row, int col) {
+    var aiPos = bestPos();
+    var row = (aiPos / 3).floor();
+    var col = aiPos % 3;
+    _board[row][col] = _isFirstTurn ? 1 : -1;
+    notifyListeners();
+    if (checkWin()) return;
+    if (checkDraw()) return;
+    _isFirstTurn = !_isFirstTurn;
+  }
+
   void changeBoard(int row, int col) {
     if (_board[row][col] == 0) {
       _board[row][col] = _isFirstTurn ? 1 : -1;
@@ -105,14 +117,7 @@ class MyProvider with ChangeNotifier {
       if (checkDraw()) return;
       _isFirstTurn = !_isFirstTurn;
       if (_computer != Computer.none) {
-        var aiPos = bestPos();
-        var row = (aiPos / 3).floor();
-        var col = aiPos % 3;
-        _board[row][col] = _isFirstTurn ? 1 : -1;
-        notifyListeners();
-        if (checkWin()) return;
-        if (checkDraw()) return;
-        _isFirstTurn = !_isFirstTurn;
+        _computerMove(row, col);
       }
     }
   }
